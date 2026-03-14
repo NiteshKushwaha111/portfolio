@@ -40,36 +40,36 @@ export class SoundManager {
             gain.connect(ctx.destination);
 
             const now = ctx.currentTime;
-            
+
             // Generate synthetic sounds to avoid missing file errors
             // -------------------------------------------------------------
             // PROFILE 1: 'DIGITAL' (Modern & Crisp) - ACTIVE
             // -------------------------------------------------------------
-            if (name === 'click') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, now);
-                osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
-                gain.gain.setValueAtTime(volume, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                osc.start(now);
-                osc.stop(now + 0.1);
-            } else if (name === 'hover') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, now);
-                gain.gain.setValueAtTime(volume * 0.5, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-                osc.start(now);
-                osc.stop(now + 0.05);
-            } else if (name === 'theme-switch') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(300, now);
-                osc.frequency.linearRampToValueAtTime(600, now + 0.2);
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(volume, now + 0.1);
-                gain.gain.linearRampToValueAtTime(0, now + 0.3);
-                osc.start(now);
-                osc.stop(now + 0.3);
-            }
+            // if (name === 'click') {
+            //     osc.type = 'sine';
+            //     osc.frequency.setValueAtTime(600, now);
+            //     osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+            //     gain.gain.setValueAtTime(volume, now);
+            //     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            //     osc.start(now);
+            //     osc.stop(now + 0.1);
+            // } else if (name === 'hover') {
+            //     osc.type = 'sine';
+            //     osc.frequency.setValueAtTime(400, now);
+            //     gain.gain.setValueAtTime(volume * 0.5, now);
+            //     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+            //     osc.start(now);
+            //     osc.stop(now + 0.05);
+            // } else if (name === 'theme-switch') {
+            //     osc.type = 'triangle';
+            //     osc.frequency.setValueAtTime(300, now);
+            //     osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+            //     gain.gain.setValueAtTime(0, now);
+            //     gain.gain.linearRampToValueAtTime(volume, now + 0.1);
+            //     gain.gain.linearRampToValueAtTime(0, now + 0.3);
+            //     osc.start(now);
+            //     osc.stop(now + 0.3);
+            // }
 
             // -------------------------------------------------------------
             // PROFILE 2: 'ANALOG' (Warm & Deep) - INACTIVE
@@ -107,7 +107,7 @@ export class SoundManager {
             // PROFILE 3: 'GLASS' (High & Resonant) - INACTIVE
             // To use, comment out Profile 1 and uncomment this section.
             // -------------------------------------------------------------
-            /*
+
             if (name === 'click') {
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(1200, now);
@@ -133,7 +133,6 @@ export class SoundManager {
                 osc.start(now);
                 osc.stop(now + 0.3);
             }
-            */
         } catch {
             // Silently fail if synthesis errors
         }

@@ -94,6 +94,18 @@ export default function Hero() {
           
           <a
             href="/Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-600 transition-colors"
+            onMouseEnter={playHover}
+            onClick={playClick}
+          >
+            View Resume
+          </a>
+          <span className="text-border mx-1">|</span>
+          <a
+            href="/Resume.pdf"
+            download="Nitesh_Kushwaha_Resume.pdf"
             className="text-blue-500 hover:text-blue-600 transition-colors"
             onMouseEnter={playHover}
             onClick={playClick}

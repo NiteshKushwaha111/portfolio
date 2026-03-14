@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { useTheme } from './theme-provider'
 import { useSound } from './sound-provider'
+import { Moon, Sun } from 'lucide-react'
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()
@@ -38,7 +39,8 @@ export function ThemeToggle() {
       aria-label={`Switch to mode`}
     >
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-blue-400 dark:to-purple-500"
+        className="absolute inset-0 "
+        // className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-500 dark:from-blue-400 dark:to-purple-500"
         initial={false}
         animate={{
           rotate: theme === 'dark' ? 0 : 180,
@@ -46,7 +48,7 @@ export function ThemeToggle() {
         transition={{ duration: 0.5 }}
       />
       <span className="relative z-10 text-sm" aria-hidden="true">
-        {theme === 'dark' ? '☀️' : '🌙'}
+        {theme === 'dark' ? <Sun className='w-4 h-4' /> : <Moon className='w-4 h-4' />}
       </span>
     </motion.button>
   )
