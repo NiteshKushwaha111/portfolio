@@ -67,7 +67,7 @@ export const resumeData = {
         "Implemented configurable workflow engine with dynamic form generation based on user roles",
         "Built responsive admin dashboard with real-time status tracking and document management",
         "Achieved 40% faster form completion through intuitive UI design and smart defaults"
-      ]
+      ],
     },
     {
       name: "Boarding Schools of India – Education Discovery Platform",
@@ -76,7 +76,8 @@ export const resumeData = {
         "Developed comprehensive school discovery platform serving 500+ schools with advanced search and comparison",
         "Implemented complex filtering using Reactive Forms with 20+ dynamic criteria and custom validators",
         "Configured Angular Universal for SSR and SEO optimization, improving page load speed by 60%"
-      ]
+      ],
+      link: "https://www.boardingschoolsofindia.com/",
     },
     {
       name: "Ensurite – Cloud-Based Insurance Platform",

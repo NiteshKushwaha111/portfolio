@@ -1,8 +1,9 @@
 // components/navbar.tsx
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { Menu, X } from 'lucide-react'
 import { useSound } from './sections/sound-provider'
 import { ThemeToggle } from './sections/theme-toggle'
 
@@ -16,6 +17,19 @@ const navItems = [
 export default function Navbar() {
   const { playHover, playClick } = useSound()
   const [scrolled, setScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+
+  // Prevent scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,16 +84,73 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <ThemeToggle />
             
-            {/* Mobile menu button - we can enhance this later */}
-            <button className="md:hidden p-2 rounded-full bg-secondary border border-border">
+            {/* Mobile menu button */}
+            <button 
+              className="md:hidden p-2 rounded-full bg-secondary border border-border hover:bg-secondary/80 transition-colors z-50 relative"
+              onClick={() => {
+                playClick()
+                setIsOpen(!isOpen)
+              }}
+              onMouseEnter={playHover}
+            >
               <span className="sr-only">Menu</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
+            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl flex flex-col items-center justify-center min-h-[100dvh]"
+          >
+            <div className="flex flex-col items-center justify-center gap-6 w-full px-6 mt-10">
+              {navItems.map((item, index) => (
+                <motion.a
+                  key={item.href}
+                  href={item.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0, 
+                    transition: { delay: index * 0.1 + 0.1 } 
+                  }}
+                  exit={{ opacity: 0, y: 20, transition: { duration: 0.1 } }}
+                  className="text-xl font-medium text-foreground/80 hover:text-foreground transition-colors py-2 relative group"
+                  onClick={() => {
+                    playClick()
+                    setIsOpen(false)
+                  }}
+                  onMouseEnter={playHover}
+                >
+                  {item.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-[2px] rounded-full bg-foreground group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              ))}
+              
+              {/* Optional: Add extra mobile CTAs here */}
+              <motion.a
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1, transition: { delay: 0.4 } }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                href="/Resume.pdf"
+                className="mt-6 px-6 py-3 rounded-full bg-foreground text-background font-medium hover:scale-105 transition-transform text-sm"
+                onClick={() => {
+                  playClick()
+                  setIsOpen(false)
+                }}
+              >
+                Download Resume
+              </motion.a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   )
 }

@@ -75,34 +75,30 @@ export default function Projects() {
                             </svg>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 items-end">
+                    <div className="flex flex-col gap-2 items-end relative z-10">
                       {project.link && (
-                        <motion.a
+                        <a
                           href={project.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-4 py-2 rounded-full bg-foreground text-background hover:scale-105 transition-transform flex items-center gap-2 text-sm font-medium shadow-md w-max"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          className="px-4 py-2 rounded-full bg-foreground text-background hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center gap-2 text-sm font-medium shadow-md w-max"
                           onMouseEnter={playHover}
                           onClick={playClick}
                         >
                           Visit Live Site <ExternalLink className="w-4 h-4" />
-                        </motion.a>
+                        </a>
                       )}
                       {project.github && (
-                        <motion.a
+                        <a
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-4 py-2 rounded-full border border-border bg-background hover:bg-secondary transition-colors flex items-center gap-2 text-sm font-medium shadow-sm text-foreground/80 w-max"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                          className="px-4 py-2 rounded-full border border-border bg-background hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-2 text-sm font-medium shadow-sm text-foreground/80 w-max"
                           onMouseEnter={playHover}
                           onClick={playClick}
                         >
                           Code <Github className="w-4 h-4" />
-                        </motion.a>
+                        </a>
                       )}
                     </div>
                   </div>
