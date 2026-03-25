@@ -10,7 +10,6 @@ import { ThemeToggle } from './sections/theme-toggle'
 const navItems = [
   { href: '#experience', label: 'Experience' },
   { href: '#projects', label: 'Projects' },
-  { href: '#blog', label: 'Blog' },
   { href: '#contact', label: 'Contact' },
 ]
 

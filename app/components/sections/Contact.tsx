@@ -19,7 +19,7 @@ export default function Contact() {
     const form = e.currentTarget
     const formData = new FormData(form)
     // Use the environment variable, falling back to a dummy string if missing to prevent FormData errors
-    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "fallback_key_missing") 
+    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "fallback_key_missing")
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -102,7 +102,7 @@ export default function Contact() {
             <div className="flex gap-4 pt-4">
               {[
                 { icon: Github, href: "https://github.com/niteshwebdev", label: "GitHub" },
-                { icon: Linkedin, href: "https://linkedin.com/in/niteshkushwaha", label: "LinkedIn" },
+                { icon: Linkedin, href: "https://linkedin.com/in/nitesh-kushwaha-dev", label: "LinkedIn" },
               ].map((social) => (
                 <motion.a
                   key={social.href}

@@ -11,21 +11,24 @@ const blogPosts = [
     excerpt: "Learn how to prevent the annoying flash of incorrect theme when implementing dark mode in Next.js applications with SSR.",
     date: "Feb 15, 2026",
     readTime: "5 min read",
-    slug: "fix-dark-mode-flicker-nextjs"
+    slug: "fix-dark-mode-flicker-nextjs",
+    link: "https://medium.com/"
   },
   {
     title: "Building Complex Reactive Forms in Angular",
     excerpt: "A deep dive into creating dynamic, nested forms with FormArrays, custom validators, and cross-field validation.",
     date: "Jan 28, 2026",
     readTime: "8 min read",
-    slug: "complex-reactive-forms-angular"
+    slug: "complex-reactive-forms-angular",
+    link: "https://medium.com/"
   },
   {
     title: "RBAC Implementation Guide for Enterprise Apps",
     excerpt: "How to design and implement scalable role-based access control systems in React and Next.js applications.",
     date: "Jan 10, 2026",
     readTime: "6 min read",
-    slug: "rbac-implementation-guide"
+    slug: "rbac-implementation-guide",
+    link: "https://medium.com/"
   }
 ]
 
@@ -60,7 +63,10 @@ export default function Blog() {
               whileHover={{ x: 10 }}
               className="group cursor-pointer"
               onMouseEnter={playHover}
-              onClick={playClick}
+              onClick={() => {
+                playClick();
+                if (post.link) window.open(post.link, '_blank');
+              }}
             >
               <div className="p-6 rounded-2xl border border-border hover:bg-secondary/30 transition-all duration-300">
                 <h3 className="text-2xl font-serif mb-3 group-hover:gradient-text transition-all">
