@@ -101,7 +101,7 @@ export default function Contact() {
             {/* Social links */}
             <div className="flex gap-4 pt-4">
               {[
-                { icon: Github, href: "https://github.com/niteshwebdev", label: "GitHub" },
+                { icon: Github, href: "https://github.com/NiteshKushwaha111", label: "GitHub" },
                 { icon: Linkedin, href: "https://linkedin.com/in/nitesh-kushwaha-dev", label: "LinkedIn" },
               ].map((social) => (
                 <motion.a
