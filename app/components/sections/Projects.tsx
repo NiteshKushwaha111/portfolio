@@ -2,12 +2,11 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, Variants } from 'framer-motion'
-import { ExternalLink, Github, TrendingUp, School, Shield, Activity } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ExternalLink, Github, TrendingUp, School, Shield, Activity, Lock, Eye, X } from 'lucide-react'
 import { useSound } from './sound-provider'
 import { resumeData } from '../../lib/resume'
 
-// We map the static icons and gradients to the dynamic projects from the resume
 const projectExtras = [
   { icon: Shield, gradient: "from-blue-500 to-purple-500" },
   { icon: Activity, gradient: "from-pink-500 to-rose-500" },
@@ -16,141 +15,231 @@ const projectExtras = [
   { icon: School, gradient: "from-indigo-500 to-cyan-500" }
 ]
 
-function ProjectCard({ project, idx, playHover, playClick, itemVariants }: any) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const extra = projectExtras[idx % projectExtras.length];
-  const Icon = extra.icon;
-
-  return (
-    <motion.div
-      variants={itemVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: idx * 0.1 }}
-      whileHover={{ y: -8 }}
-      className="group relative bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500"
-      onMouseEnter={playHover}
-    >
-      {/* Gradient background glow on hover */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${extra.gradient} opacity-0 group-hover:opacity-[0.03] dark:group-hover:opacity-[0.08] transition-opacity duration-500`} />
-      
-      <div className="p-8 h-full flex flex-col">
-        {/* Header */}
-        <div className="flex items-start justify-between mb-8">
-          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${extra.gradient} p-[1px] shadow-lg`}>
-              <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center p-3">
-                  <Icon className={`w-full h-full text-transparent bg-clip-text bg-gradient-to-br ${extra.gradient} drop-shadow-sm`} style={{ color: 'url(#gradient)' }} />
-                  {/* SVG Gradient definition for the icon */}
-                  <svg width="0" height="0">
-                    <linearGradient id={`${project.name}-grad`} x1="100%" y1="100%" x2="0%" y2="0%">
-                      <stop stopColor="currentColor" offset="0%" />
-                      <stop stopColor="currentColor" offset="100%" />
-                    </linearGradient>
-                  </svg>
-              </div>
-          </div>
-          <div className="flex flex-col gap-2 items-end relative z-10">
-            {project.link && (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full bg-foreground text-background hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center gap-2 text-sm font-medium shadow-md w-max"
-                onMouseEnter={playHover}
-                onClick={playClick}
-              >
-                Visit Live Site <ExternalLink className="w-4 h-4" />
-              </a>
-            )}
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full border border-border bg-background hover:bg-secondary hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-2 text-sm font-medium shadow-sm text-foreground/80 w-max"
-                onMouseEnter={playHover}
-                onClick={playClick}
-              >
-                Code <Github className="w-4 h-4" />
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* Content */}
-        <h3 className="text-2xl font-serif mb-3 font-semibold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-foreground group-hover:to-foreground/70 transition-colors">
-          {project.name.split('–')[0].trim()}
-        </h3>
-        <div className="text-sm font-mono text-foreground/40 mb-4 truncate">
-           {project.name.split('–')[1]?.trim() || "Enterprise Application"}
-        </div>
-        
-        <div className="text-foreground/70 mb-8 flex-grow flex flex-col items-start">
-          <p className={isExpanded ? "" : "line-clamp-3 overflow-hidden text-ellipsis"}>
-              {project.details.join('. ')}.
-          </p>
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)} 
-            className="text-sm font-medium hover:text-foreground text-foreground/50 transition-colors mt-3 inline-block relative z-20"
-          >
-            {isExpanded ? "Read Less ↑" : "Read More ↓"}
-          </button>
-        </div>
-
-        {/* Tech stack */}
-        <div className="flex flex-wrap gap-2 mt-auto">
-          {project.techStack.map((tech: string) => (
-            <span
-              key={tech}
-              className="px-3 py-1 text-xs font-medium rounded-full bg-secondary/80 border border-border text-foreground/80 hover:bg-foreground hover:text-background transition-colors cursor-default"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+const categories = ["All", "Next.js & React", "Angular & MEAN", "Enterprise Systems"]
 
 export default function Projects() {
   const { playHover, playClick } = useSound()
+  const [activeCategory, setActiveCategory] = useState("All")
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<any | null>(null)
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  }
+  const filteredProjects = resumeData.projects.filter((project) => {
+    if (activeCategory === "All") return true
+    return project.category === activeCategory
+  })
 
   return (
-    <section id="projects" className="py-32 relative">
+    <section id="projects" className="py-28 relative">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 text-center"
+          className="mb-12 text-center"
         >
-          <span className="text-sm font-mono text-foreground/40 mb-4 block">
+          <span className="text-xs font-mono text-foreground/50 mb-3 block tracking-widest uppercase">
             / SELECTED WORK
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl gradient-text">
-            {`Platforms I've Built`}
+          <h2 className="font-serif text-4xl md:text-5xl gradient-text mb-4">
+            Platforms & Applications
           </h2>
+          <p className="text-sm md:text-base text-foreground/60 max-w-2xl mx-auto">
+            A curated list of public web applications and internal enterprise systems engineered across React, Next.js, and Angular.
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {resumeData.projects.map((project, idx) => (
-            <ProjectCard
-              key={project.name}
-              project={project}
-              idx={idx}
-              playHover={playHover}
-              playClick={playClick}
-              itemVariants={itemVariants}
-            />
+        {/* Filter Category Tabs */}
+        <div className="flex flex-wrap justify-center gap-2 mb-12 bg-secondary/40 p-1.5 rounded-2xl border border-border/50 max-w-max mx-auto">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                playClick()
+                setActiveCategory(cat)
+              }}
+              onMouseEnter={playHover}
+              className={`px-4 py-2 text-xs font-medium rounded-xl transition-all ${
+                activeCategory === cat
+                  ? 'bg-foreground text-background shadow-md'
+                  : 'text-foreground/70 hover:text-foreground hover:bg-secondary/60'
+              }`}
+            >
+              {cat}
+            </button>
           ))}
         </div>
+
+        {/* Project Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {filteredProjects.map((project, idx) => {
+            const extra = projectExtras[idx % projectExtras.length];
+            const Icon = extra.icon;
+
+            return (
+              <motion.div
+                key={project.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.08 }}
+                whileHover={{ y: -6 }}
+                className="group relative bg-card border border-border/70 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col"
+                onMouseEnter={playHover}
+              >
+                {/* Gradient background glow on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${extra.gradient} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-500 pointer-events-none`} />
+                
+                <div className="p-8 h-full flex flex-col justify-between relative z-10">
+                  <div>
+                    {/* Top Row: Icon & Links / Badges */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${extra.gradient} p-[1px] shadow-md`}>
+                        <div className="w-full h-full bg-background rounded-[15px] flex items-center justify-center p-2.5">
+                          <Icon className="w-5 h-5 text-foreground/80" />
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 items-center justify-end">
+                        {project.isNDA ? (
+                          <button
+                            onClick={() => {
+                              playClick()
+                              setSelectedCaseStudy(project)
+                            }}
+                            onMouseEnter={playHover}
+                            className="px-3.5 py-1.5 rounded-full bg-secondary border border-border text-xs font-medium text-foreground/80 hover:text-foreground hover:border-border/80 transition-all flex items-center gap-1.5"
+                          >
+                            <Lock className="w-3 h-3 text-amber-500" /> Enterprise Case Study
+                          </button>
+                        ) : (
+                          <>
+                            {project.link && (
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3.5 py-1.5 rounded-full bg-foreground text-background hover:opacity-90 transition-opacity flex items-center gap-1.5 text-xs font-semibold shadow-sm"
+                                onMouseEnter={playHover}
+                                onClick={playClick}
+                              >
+                                Live Demo <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                            {project.github && (
+                              <a
+                                href={project.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3.5 py-1.5 rounded-full border border-border bg-secondary/50 hover:bg-secondary transition-colors flex items-center gap-1.5 text-xs font-medium text-foreground/80"
+                                onMouseEnter={playHover}
+                                onClick={playClick}
+                              >
+                                Code <Github className="w-3 h-3" />
+                              </a>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl sm:text-2xl font-serif font-semibold mb-2 group-hover:text-blue-500 transition-colors">
+                      {project.name.split('–')[0].trim()}
+                    </h3>
+                    <div className="text-xs font-mono text-foreground/50 mb-4">
+                      {project.name.split('–')[1]?.trim() || project.category}
+                    </div>
+
+                    {/* Details Bullet List */}
+                    <ul className="space-y-2 mb-6 text-xs sm:text-sm text-foreground/70">
+                      {project.details.map((detail, dIdx) => (
+                        <li key={dIdx} className="flex items-start gap-2">
+                          <span className="text-blue-500 font-bold select-none">•</span>
+                          <span>{detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {project.isNDA && (
+                      <div className="mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs flex items-center gap-2">
+                        <Lock className="w-4 h-4 shrink-0" />
+                        <span>{project.ndaNotice}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Tech stack */}
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border/40">
+                    {project.techStack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 text-[11px] font-mono rounded-lg bg-secondary/70 border border-border/60 text-foreground/80"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* NDA Case Study Modal */}
+        <AnimatePresence>
+          {selectedCaseStudy && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-center justify-center p-6"
+              onClick={() => setSelectedCaseStudy(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-card border border-border rounded-3xl max-w-xl w-full p-8 shadow-2xl relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setSelectedCaseStudy(null)}
+                  className="absolute top-6 right-6 p-2 rounded-full bg-secondary hover:bg-secondary/80 text-foreground/60 hover:text-foreground"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="flex items-center gap-2 text-amber-500 text-xs font-mono mb-2">
+                  <Lock className="w-4 h-4" /> Internal Enterprise System Case Study
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-foreground mb-4">
+                  {selectedCaseStudy.name}
+                </h3>
+                <div className="space-y-3 text-xs sm:text-sm text-foreground/80 mb-6 leading-relaxed">
+                  <p>
+                    <strong className="text-foreground">Architecture Highlights:</strong> Engineered for enterprise clients managing sensitive regulatory data and multi-role operations.
+                  </p>
+                  <ul className="list-disc pl-5 space-y-1 text-foreground/70">
+                    {selectedCaseStudy.details.map((item: string, i: number) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                  <p className="text-xs text-foreground/50 pt-2 border-t border-border">
+                    💡 Due to non-disclosure agreements, live access to production databases is restricted. Detailed architecture diagrams and Loom walkthroughs are available upon request.
+                  </p>
+                </div>
+
+                <div className="flex justify-end gap-3">
+                  <a
+                    href="#contact"
+                    onClick={() => setSelectedCaseStudy(null)}
+                    className="px-5 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    Request Walkthrough
+                  </a>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )
