@@ -3,19 +3,19 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, Github, TrendingUp, School, Shield, Activity, Lock, Eye, X } from 'lucide-react'
+import { ExternalLink, Github, TrendingUp, School, Shield, Activity, Lock, X } from 'lucide-react'
 import { useSound } from './sound-provider'
 import { resumeData } from '../../lib/resume'
 
 const projectExtras = [
-  { icon: Shield, gradient: "from-blue-500 to-purple-500" },
-  { icon: Activity, gradient: "from-pink-500 to-rose-500" },
-  { icon: ExternalLink, gradient: "from-emerald-500 to-teal-500" },
+  { icon: School, gradient: "from-blue-500 to-indigo-500" },
+  { icon: Shield, gradient: "from-purple-500 to-pink-500" },
+  { icon: Activity, gradient: "from-emerald-500 to-teal-500" },
   { icon: TrendingUp, gradient: "from-orange-500 to-amber-500" },
-  { icon: School, gradient: "from-indigo-500 to-cyan-500" }
+  { icon: ExternalLink, gradient: "from-cyan-500 to-blue-500" }
 ]
 
-const categories = ["All", "Next.js & React", "Angular & MEAN", "Enterprise Systems"]
+const categories = ["All", "Full-Stack Platform", "Enterprise Systems", "Next.js & React"]
 
 export default function Projects() {
   const { playHover, playClick } = useSound()
@@ -28,22 +28,22 @@ export default function Projects() {
   })
 
   return (
-    <section id="projects" className="py-28 relative">
+    <section id="projects" className="py-24 relative">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
           className="mb-12 text-center"
         >
           <span className="text-xs font-mono text-foreground/50 mb-3 block tracking-widest uppercase">
-            / SELECTED WORK
+            / FEATURED PROJECTS
           </span>
           <h2 className="font-serif text-4xl md:text-5xl gradient-text mb-4">
-            Platforms & Applications
+            Production & Enterprise Work
           </h2>
-          <p className="text-sm md:text-base text-foreground/60 max-w-2xl mx-auto">
-            A curated list of public web applications and internal enterprise systems engineered across React, Next.js, and Angular.
+          <p className="text-sm md:text-base text-foreground/60 max-w-2xl mx-auto leading-relaxed">
+            Full-stack platforms, SSR performance migrations, 80+ dynamic form engines, and enterprise RBAC architectures.
           </p>
         </motion.div>
 
@@ -79,8 +79,8 @@ export default function Projects() {
                 key={project.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.08 }}
-                whileHover={{ y: -6 }}
+                transition={{ delay: idx * 0.06 }}
+                whileHover={{ y: -5 }}
                 className="group relative bg-card border border-border/70 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col"
                 onMouseEnter={playHover}
               >
@@ -107,7 +107,7 @@ export default function Projects() {
                             onMouseEnter={playHover}
                             className="px-3.5 py-1.5 rounded-full bg-secondary border border-border text-xs font-medium text-foreground/80 hover:text-foreground hover:border-border/80 transition-all flex items-center gap-1.5"
                           >
-                            <Lock className="w-3 h-3 text-amber-500" /> Enterprise Case Study
+                            <Lock className="w-3 h-3 text-amber-500" /> Case Study
                           </button>
                         ) : (
                           <>
@@ -142,14 +142,14 @@ export default function Projects() {
 
                     {/* Title */}
                     <h3 className="text-xl sm:text-2xl font-serif font-semibold mb-2 group-hover:text-blue-500 transition-colors">
-                      {project.name.split('–')[0].trim()}
+                      {project.name}
                     </h3>
                     <div className="text-xs font-mono text-foreground/50 mb-4">
-                      {project.name.split('–')[1]?.trim() || project.category}
+                      {project.category}
                     </div>
 
                     {/* Details Bullet List */}
-                    <ul className="space-y-2 mb-6 text-xs sm:text-sm text-foreground/70">
+                    <ul className="space-y-2 mb-6 text-xs sm:text-sm text-foreground/75 leading-relaxed">
                       {project.details.map((detail, dIdx) => (
                         <li key={dIdx} className="flex items-start gap-2">
                           <span className="text-blue-500 font-bold select-none">•</span>
@@ -157,13 +157,6 @@ export default function Projects() {
                         </li>
                       ))}
                     </ul>
-
-                    {project.isNDA && (
-                      <div className="mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 text-xs flex items-center gap-2">
-                        <Lock className="w-4 h-4 shrink-0" />
-                        <span>{project.ndaNotice}</span>
-                      </div>
-                    )}
                   </div>
 
                   {/* Tech stack */}
@@ -183,7 +176,7 @@ export default function Projects() {
           })}
         </div>
 
-        {/* NDA Case Study Modal */}
+        {/* Case Study Modal */}
         <AnimatePresence>
           {selectedCaseStudy && (
             <motion.div
@@ -208,23 +201,21 @@ export default function Projects() {
                 </button>
 
                 <div className="flex items-center gap-2 text-amber-500 text-xs font-mono mb-2">
-                  <Lock className="w-4 h-4" /> Internal Enterprise System Case Study
+                  <Lock className="w-4 h-4" /> Enterprise Project Details
                 </div>
                 <h3 className="text-2xl font-serif font-bold text-foreground mb-4">
                   {selectedCaseStudy.name}
                 </h3>
                 <div className="space-y-3 text-xs sm:text-sm text-foreground/80 mb-6 leading-relaxed">
-                  <p>
-                    <strong className="text-foreground">Architecture Highlights:</strong> Engineered for enterprise clients managing sensitive regulatory data and multi-role operations.
-                  </p>
-                  <ul className="list-disc pl-5 space-y-1 text-foreground/70">
+                  <p className="font-semibold text-foreground">Key Architecture Highlights:</p>
+                  <ul className="list-disc pl-5 space-y-1 text-foreground/75">
                     {selectedCaseStudy.details.map((item: string, i: number) => (
                       <li key={i}>{item}</li>
                     ))}
                   </ul>
-                  <p className="text-xs text-foreground/50 pt-2 border-t border-border">
-                    💡 Due to non-disclosure agreements, live access to production databases is restricted. Detailed architecture diagrams and Loom walkthroughs are available upon request.
-                  </p>
+                  <div className="pt-3 border-t border-border/50 text-xs text-foreground/50">
+                    💡 Built for enterprise clients managing sensitive regulatory data and multi-role workflows. Detailed code walkthroughs available upon request.
+                  </div>
                 </div>
 
                 <div className="flex justify-end gap-3">
@@ -233,7 +224,7 @@ export default function Projects() {
                     onClick={() => setSelectedCaseStudy(null)}
                     className="px-5 py-2.5 rounded-xl bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity"
                   >
-                    Request Walkthrough
+                    Contact Me
                   </a>
                 </div>
               </motion.div>

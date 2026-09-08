@@ -2,36 +2,36 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Zap, Clock, ShieldCheck, Layers } from 'lucide-react'
+import { Zap, Clock, ShieldCheck, Server } from 'lucide-react'
 import { useSound } from './sound-provider'
 
 const stats = [
   {
     icon: Zap,
     metric: "167%",
-    label: "Lighthouse Score Increase",
-    subtext: "From 30 to 80+ via SSR & lazy loading",
+    label: "Lighthouse Score Boost",
+    subtext: "From 30 to 80+ via Next.js SSR migration",
     gradient: "from-blue-500 to-indigo-500"
   },
   {
     icon: Clock,
     metric: "3+ Yrs",
     label: "Professional Experience",
-    subtext: "Shipping Angular, Next.js & MEAN apps",
+    subtext: "Soluzione IT Services (June 2023 – July 2026)",
     gradient: "from-purple-500 to-pink-500"
   },
   {
     icon: ShieldCheck,
-    metric: "60+",
+    metric: "80+",
     label: "Dynamic Forms Engineered",
     subtext: "With 60% reduction in data entry errors",
     gradient: "from-emerald-500 to-teal-500"
   },
   {
-    icon: Layers,
-    metric: "25%",
-    label: "Dev Speed Acceleration",
-    subtext: "Via 30+ reusable component libraries",
+    icon: Server,
+    metric: "20+",
+    label: "REST APIs Developed",
+    subtext: "Node.js, Express & MongoDB for 700+ schools",
     gradient: "from-amber-500 to-orange-500"
   }
 ]

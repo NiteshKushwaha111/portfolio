@@ -3,7 +3,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { Menu, X, Volume2, VolumeX, FileText, Sparkles, ChevronDown } from 'lucide-react'
+import { Menu, X, Volume2, VolumeX, FileText, Command, Search } from 'lucide-react'
 import { useSound } from './sections/sound-provider'
 import { ThemeToggle } from './sections/theme-toggle'
 
@@ -20,9 +20,14 @@ export default function Navbar() {
   const { playHover, playClick, isMuted, toggleMute } = useSound()
   const [scrolled, setScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [showResumeDropdown, setShowResumeDropdown] = useState(false)
   const [activeSection, setActiveSection] = useState('skills')
   const [scrollProgress, setScrollProgress] = useState(0)
+
+  // Dispatch event to open Command Palette
+  const handleOpenCommandPalette = () => {
+    playClick()
+    window.dispatchEvent(new Event('openCommandPalette'))
+  }
 
   // Prevent background scroll when mobile drawer is open
   useEffect(() => {
@@ -84,7 +89,7 @@ export default function Navbar() {
       }`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between">
-            {/* High-Visibility Sharp Logo & Role Brand */}
+            {/* Logo & Brand */}
             <motion.a
               href="#"
               className="group flex items-center gap-2.5 text-lg font-bold tracking-tight text-foreground"
@@ -93,13 +98,12 @@ export default function Navbar() {
               onMouseEnter={playHover}
               onClick={playClick}
             >
-              {/* High Contrast Solid Gradient Icon Box */}
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white font-mono text-sm font-extrabold tracking-tight flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:shadow-blue-500/40 group-hover:scale-105 transition-all">
                 NK
               </div>
               <div className="hidden sm:flex flex-col text-left">
                 <span className="text-sm font-bold font-serif leading-tight text-foreground">Nitesh Kushwaha</span>
-                <span className="text-[10px] font-mono text-foreground/70 dark:text-foreground/60">Full-Stack & Frontend Engineer</span>
+                <span className="text-[10px] font-mono text-foreground/70 dark:text-foreground/60">Frontend Developer</span>
               </div>
             </motion.a>
 
@@ -132,8 +136,22 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Right Actions: Sound Toggle, Theme Toggle, Resume Selector */}
+            {/* Right Actions: Command Palette Trigger, Sound Toggle, Theme Toggle, Resume Button */}
             <div className="flex items-center gap-2 sm:gap-2.5">
+              {/* Cmd+K Command Palette Trigger Badge */}
+              <button
+                onClick={handleOpenCommandPalette}
+                onMouseEnter={playHover}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/80 border border-border hover:bg-secondary transition-all text-xs font-mono text-foreground/70 hover:text-foreground shadow-sm"
+                title="Open Command Palette (Ctrl+K)"
+              >
+                <Search className="w-3.5 h-3.5 text-blue-500" />
+                <span className="hidden lg:inline text-[11px]">Command</span>
+                <kbd className="px-1.5 py-0.5 rounded bg-background border border-border/80 text-[10px] font-mono text-foreground/60">
+                  ⌘K
+                </kbd>
+              </button>
+
               {/* Sound Toggle Button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -149,71 +167,21 @@ export default function Navbar() {
 
               <ThemeToggle />
 
-              {/* Desktop Resume Selector Dropdown */}
-              <div className="relative hidden lg:block">
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => {
-                    playClick()
-                    setShowResumeDropdown(!showResumeDropdown)
-                  }}
-                  onMouseEnter={playHover}
-                  className="px-4 py-2 text-xs font-semibold rounded-full bg-foreground text-background hover:opacity-90 transition-all flex items-center gap-1.5 shadow-md"
-                >
-                  <FileText className="w-3.5 h-3.5" />
-                  <span>Resume</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${showResumeDropdown ? 'rotate-180' : ''}`} />
-                </motion.button>
-
-                <AnimatePresence>
-                  {showResumeDropdown && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 12, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute right-0 mt-3 w-72 bg-card border border-border rounded-2xl shadow-2xl p-2.5 z-50 backdrop-blur-2xl"
-                    >
-                      <div className="px-3 py-2 text-[10px] font-mono text-foreground/50 uppercase tracking-widest border-b border-border/50 mb-1 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-amber-500" /> Download Targeted Resume
-                      </div>
-                      
-                      <a
-                        href="/Resume.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-secondary transition-colors text-left"
-                        onClick={() => setShowResumeDropdown(false)}
-                      >
-                        <div className="p-2 rounded-lg bg-blue-500/10 text-blue-500 border border-blue-500/20 group-hover:scale-105 transition-transform mt-0.5">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-foreground">Frontend Role</div>
-                          <div className="text-[11px] text-foreground/60">React.js, Next.js & UI Architecture</div>
-                        </div>
-                      </a>
-
-                      <a
-                        href="/Resume.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-secondary transition-colors text-left"
-                        onClick={() => setShowResumeDropdown(false)}
-                      >
-                        <div className="p-2 rounded-lg bg-purple-500/10 text-purple-500 border border-purple-500/20 group-hover:scale-105 transition-transform mt-0.5">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-foreground">Full-Stack Role</div>
-                          <div className="text-[11px] text-foreground/60">Angular & MEAN Stack APIs</div>
-                        </div>
-                      </a>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              {/* Single Direct Resume Download Button */}
+              <motion.a
+                href="/Resume.pdf"
+                download="Nitesh Kushwaha.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onMouseEnter={playHover}
+                onClick={playClick}
+                className="hidden lg:flex px-4 py-2 text-xs font-semibold rounded-full bg-foreground text-background hover:opacity-90 transition-all items-center gap-1.5 shadow-md"
+              >
+                <FileText className="w-3.5 h-3.5 text-blue-400" />
+                <span>Resume</span>
+              </motion.a>
 
               {/* Mobile Hamburger Button */}
               <button
@@ -258,26 +226,29 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Mobile Resume Buttons */}
-            <div className="space-y-3 pt-6 border-t border-border/60">
-              <span className="text-xs font-mono text-foreground/50 uppercase tracking-widest block">Resume Downloads</span>
+            {/* Mobile Actions */}
+            <div className="pt-6 border-t border-border/60 space-y-3">
+              <button
+                onClick={() => {
+                  setIsOpen(false)
+                  handleOpenCommandPalette()
+                }}
+                className="w-full text-center px-4 py-3 rounded-xl bg-secondary border border-border text-foreground font-semibold text-xs flex items-center justify-center gap-2"
+              >
+                <Command className="w-4 h-4 text-blue-500" />
+                Open Command Palette (⌘K)
+              </button>
+
               <a
                 href="/Resume.pdf"
+                download="Nitesh Kushwaha.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full text-center px-4 py-3 rounded-xl bg-foreground text-background font-semibold text-xs block shadow-md"
+                className="w-full text-center px-4 py-3 rounded-xl bg-foreground text-background font-semibold text-xs flex items-center justify-center gap-2 shadow-md"
                 onClick={() => setIsOpen(false)}
               >
-                📄 Download Frontend Resume (React/Next.js)
-              </a>
-              <a
-                href="/Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full text-center px-4 py-3 rounded-xl bg-secondary border border-border text-foreground font-semibold text-xs block"
-                onClick={() => setIsOpen(false)}
-              >
-                ⚡ Download Full-Stack Resume (Angular/MEAN)
+                <FileText className="w-4 h-4 text-blue-400" />
+                View Official Resume
               </a>
             </div>
           </motion.div>
