@@ -126,7 +126,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Action CTAs: Direct Single Resume Link with Nitesh Kushwaha.pdf download attribute */}
+        {/* Action CTAs: Direct Single Resume Link */}
         <motion.div variants={itemVariants} className="flex flex-wrap gap-4 justify-center items-center text-sm font-medium relative z-30">
           <a
             href="#projects"
@@ -148,7 +148,7 @@ export default function Hero() {
             className="px-6 py-3 rounded-full border border-border bg-secondary/80 hover:bg-secondary transition-all flex items-center gap-2 font-semibold text-foreground shadow-sm hover:scale-105"
           >
             <FileText className="w-4 h-4 text-blue-500" />
-            <span>View Official Resume</span>
+            <span>Download Resume</span>
           </a>
 
           {/* Quick Copy Email Button */}

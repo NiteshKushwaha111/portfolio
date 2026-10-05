@@ -248,7 +248,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
               >
                 <FileText className="w-4 h-4 text-blue-400" />
-                View Official Resume
+                Download Resume
               </a>
             </div>
           </motion.div>
