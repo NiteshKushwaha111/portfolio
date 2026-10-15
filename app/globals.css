@@ -90,3 +90,36 @@
 
 /* Custom variants */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Ambient Engineering Grid & Technical Background Texture */
+.bg-ambient-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(120, 120, 120, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 120, 120, 0.04) 1px, transparent 1px);
+}
+
+.dark .bg-ambient-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+}
+
+/* Modern Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.45);
+}

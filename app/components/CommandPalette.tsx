@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Command, FileText, Mail, Phone, Moon, Sun, Volume2, VolumeX, Layout, Shield, Award, Terminal, X, ArrowRight } from 'lucide-react'
+import { Search, Command, FileText, Mail, Moon, Sun, Volume2, VolumeX, Layout, Shield, Award, Terminal, X, ArrowRight, UserCheck } from 'lucide-react'
 import { useSound } from './sections/sound-provider'
 import { useTheme } from 'next-themes'
 
@@ -19,6 +19,7 @@ interface CommandItem {
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const [copiedEmail, setCopiedEmail] = useState(false)
   const { playHover, playClick, isMuted, toggleMute } = useSound()
   const { theme, setTheme } = useTheme()
 
@@ -46,42 +47,9 @@ export default function CommandPalette() {
 
   const items: CommandItem[] = [
     {
-      id: 'nav-skills',
-      title: 'Skills & Arsenal',
-      subtitle: 'Jump to technical skills section',
-      icon: Terminal,
-      category: 'Navigation',
-      action: () => {
-        window.location.href = '#skills'
-        setIsOpen(false)
-      }
-    },
-    {
-      id: 'nav-playground',
-      title: 'Interactive Playground',
-      subtitle: 'Test RBAC & Form Engine demos',
-      icon: Layout,
-      category: 'Navigation',
-      action: () => {
-        window.location.href = '#playground'
-        setIsOpen(false)
-      }
-    },
-    {
-      id: 'nav-experience',
-      title: 'Work Experience',
-      subtitle: 'View 3+ years career record',
-      icon: Award,
-      category: 'Navigation',
-      action: () => {
-        window.location.href = '#experience'
-        setIsOpen(false)
-      }
-    },
-    {
       id: 'nav-projects',
       title: 'Featured Projects',
-      subtitle: 'Explore 6 production & enterprise platforms',
+      subtitle: 'Explore full-stack, enterprise & independent projects',
       icon: Shield,
       category: 'Navigation',
       action: () => {
@@ -90,9 +58,64 @@ export default function CommandPalette() {
       }
     },
     {
+      id: 'nav-skills',
+      title: 'Technical Skills & Arsenal',
+      subtitle: 'Frontend, Backend, Database & Delivery tools',
+      icon: Terminal,
+      category: 'Navigation',
+      action: () => {
+        window.location.href = '#skills'
+        setIsOpen(false)
+      }
+    },
+    {
+      id: 'nav-experience',
+      title: 'Professional Experience',
+      subtitle: 'Soluzione IT Services (June 2023 – July 2026)',
+      icon: Award,
+      category: 'Navigation',
+      action: () => {
+        window.location.href = '#experience'
+        setIsOpen(false)
+      }
+    },
+    {
+      id: 'nav-playground',
+      title: 'Interactive Playground',
+      subtitle: 'Test RBAC simulation & SSR performance comparison',
+      icon: Layout,
+      category: 'Navigation',
+      action: () => {
+        window.location.href = '#playground'
+        setIsOpen(false)
+      }
+    },
+    {
+      id: 'nav-about',
+      title: 'About Me & Education',
+      subtitle: 'Background summary & B.Tech credentials',
+      icon: UserCheck,
+      category: 'Navigation',
+      action: () => {
+        window.location.href = '#about'
+        setIsOpen(false)
+      }
+    },
+    {
+      id: 'nav-contact',
+      title: 'Contact Me',
+      subtitle: 'Send a message or connect via email/LinkedIn',
+      icon: Mail,
+      category: 'Navigation',
+      action: () => {
+        window.location.href = '#contact'
+        setIsOpen(false)
+      }
+    },
+    {
       id: 'action-resume',
-      title: 'Download Official Resume',
-      subtitle: 'Nitesh Kushwaha.pdf',
+      title: 'Download Resume',
+      subtitle: 'Official PDF (Nitesh Kushwaha.pdf)',
       icon: FileText,
       category: 'Actions',
       action: () => {
@@ -106,20 +129,23 @@ export default function CommandPalette() {
     },
     {
       id: 'action-email',
-      title: 'Copy Email Address',
+      title: copiedEmail ? 'Copied niteshkushwaha603@gmail.com!' : 'Copy Email Address',
       subtitle: 'niteshkushwaha603@gmail.com',
       icon: Mail,
       category: 'Actions',
       action: () => {
         navigator.clipboard.writeText('niteshkushwaha603@gmail.com')
-        alert('Copied niteshkushwaha603@gmail.com to clipboard!')
-        setIsOpen(false)
+        setCopiedEmail(true)
+        setTimeout(() => {
+          setCopiedEmail(false)
+          setIsOpen(false)
+        }, 1200)
       }
     },
     {
       id: 'pref-theme',
       title: theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme',
-      subtitle: 'Toggle global color scheme',
+      subtitle: 'Toggle color scheme mode',
       icon: theme === 'dark' ? Sun : Moon,
       category: 'Preferences',
       action: () => {
@@ -130,7 +156,7 @@ export default function CommandPalette() {
     {
       id: 'pref-sound',
       title: isMuted ? 'Unmute Sound Effects' : 'Mute Sound Effects',
-      subtitle: 'Toggle audio feedback',
+      subtitle: 'Toggle UI audio feedback',
       icon: isMuted ? VolumeX : Volume2,
       category: 'Preferences',
       action: () => {
@@ -175,23 +201,21 @@ export default function CommandPalette() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Type a command or search (e.g. Resume, Skills, Dark Theme)..."
+                placeholder="Type a command or search (e.g. Projects, Skills, Resume, Dark Theme)..."
                 className="w-full bg-transparent text-sm sm:text-base outline-none text-foreground placeholder:text-foreground/40 font-medium"
                 autoFocus
               />
-              <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-[10px] font-mono rounded-lg bg-secondary border border-border text-foreground/60">
-                ESC
-              </kbd>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-lg hover:bg-secondary text-foreground/50 hover:text-foreground sm:hidden"
+                className="p-1 rounded-lg text-foreground/40 hover:text-foreground hover:bg-secondary transition-colors"
+                aria-label="Close command palette"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Results List */}
-            <div className="max-h-[360px] overflow-y-auto p-2 space-y-1">
+            {/* List */}
+            <div className="max-h-80 overflow-y-auto p-2 space-y-1">
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => {
                   const Icon = item.icon
@@ -203,10 +227,10 @@ export default function CommandPalette() {
                         item.action()
                       }}
                       onMouseEnter={playHover}
-                      className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-secondary/70 transition-colors text-left group"
+                      className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-secondary/70 transition-all text-left group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-xl bg-background border border-border/60 shadow-sm text-foreground/80 group-hover:text-blue-500 group-hover:border-blue-500/30 transition-all">
+                        <div className="p-2 rounded-xl bg-background border border-border/80 text-foreground/70 group-hover:text-blue-500 group-hover:border-blue-500/30 transition-all">
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>

@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from './components/sections/theme-provider'
 import { SoundProvider } from './components/sections/sound-provider'
+import CustomCursor from './components/CustomCursor'
 
 const inter = Inter({ 
   subsets: ['latin'], 
@@ -16,16 +17,39 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Nitesh Kushwaha - Full-Stack & Frontend Engineer (Angular, React, Next.js & MEAN)',
-  description: 'Full-Stack & Frontend Engineer specializing in Angular, React & Next.js — with MEAN stack experience shipping production APIs, 167% SSR performance boosts, and enterprise RBAC platforms.',
-  keywords: ['Nitesh Kushwaha', 'Full-Stack Developer', 'Frontend Engineer', 'Next.js Developer', 'Angular Developer', 'React Developer', 'MEAN Stack Developer', 'Bhopal'],
+  metadataBase: new URL('https://niteshwebdev-portfolio.vercel.app'),
+  title: 'Nitesh Kushwaha | MERN Stack Developer & Full Stack JavaScript Engineer',
+  description: 'Full Stack JavaScript Developer with 3+ years of experience in React.js, Next.js, Node.js, Express.js, MongoDB, REST APIs, and production web applications.',
+  keywords: [
+    'Nitesh Kushwaha',
+    'MERN Stack Developer',
+    'Full Stack JavaScript Engineer',
+    'React.js Developer',
+    'Next.js Developer',
+    'Node.js Developer',
+    'Express.js',
+    'MongoDB',
+    'REST APIs',
+    'Frontend Developer',
+    'Angular Developer',
+    'Bhopal'
+  ],
   authors: [{ name: 'Nitesh Kushwaha' }],
-  openGraph: {
-    title: 'Nitesh Kushwaha - Full-Stack & Frontend Engineer',
-    description: 'Full-Stack & Frontend Engineer specializing in Angular, React & Next.js with MEAN stack capability. Proven 167% Lighthouse score boost.',
-    type: 'website',
-    url: 'https://niteshkushwaha.dev',
+  alternates: {
+    canonical: 'https://niteshwebdev-portfolio.vercel.app',
   },
+  openGraph: {
+    title: 'Nitesh Kushwaha | MERN Stack Developer & Full Stack JavaScript Engineer',
+    description: 'Full Stack JavaScript Developer with 3+ years of experience in React.js, Next.js, Node.js, Express.js, MongoDB, REST APIs, and production web applications.',
+    type: 'website',
+    url: 'https://niteshwebdev-portfolio.vercel.app',
+    siteName: 'Nitesh Kushwaha Portfolio',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nitesh Kushwaha | MERN Stack Developer & Full Stack JavaScript Engineer',
+    description: 'Full Stack JavaScript Developer with 3+ years of experience in React.js, Next.js, Node.js, Express.js, MongoDB, REST APIs, and production web applications.',
+  }
 }
 
 export default function RootLayout({
@@ -37,7 +61,7 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Nitesh Kushwaha',
-    jobTitle: 'Full-Stack & Frontend Engineer',
+    jobTitle: 'MERN Stack Developer | Full Stack JavaScript Engineer',
     worksFor: {
       '@type': 'Organization',
       name: 'Soluzione IT Services Pvt. Ltd.',
@@ -46,10 +70,26 @@ export default function RootLayout({
       '@type': 'EducationalOrganization',
       name: 'Technocrats Institute of Technology',
     },
-    knowsAbout: ['Angular', 'Next.js', 'React.js', 'TypeScript', 'Node.js', 'Express.js', 'MongoDB', 'RxJS', 'Tailwind CSS', 'SSR', 'RBAC'],
+    knowsAbout: [
+      'React.js',
+      'Next.js',
+      'Node.js',
+      'Express.js',
+      'MongoDB',
+      'Mongoose',
+      'REST APIs',
+      'JavaScript (ES6+)',
+      'TypeScript',
+      'Angular',
+      'RxJS',
+      'NgRx',
+      'Tailwind CSS',
+      'Server-Side Rendering (SSR)',
+      'Role-Based Access Control (RBAC)'
+    ],
     sameAs: [
       'https://github.com/NiteshKushwaha111',
-      'https://linkedin.com/in/nitesh-kushwaha-dev',
+      'https://www.linkedin.com/in/nitesh-kushwaha-dev/',
     ],
   }
 
@@ -64,6 +104,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}>
         <ThemeProvider>
           <SoundProvider>
+            <CustomCursor />
             {children}
           </SoundProvider>
         </ThemeProvider>

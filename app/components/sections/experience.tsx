@@ -1,17 +1,52 @@
 // components/sections/experience.tsx
 'use client'
 
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, MapPin, Award, Zap, Code, Server, CheckCircle2 } from 'lucide-react'
+import { Calendar, MapPin, Award, Zap, Code, Server, CheckCircle2, ShieldCheck, Briefcase } from 'lucide-react'
 import { useSound } from './sound-provider'
 import { resumeData } from '../../lib/resume'
 
+const roleTechPills = [
+  'React.js',
+  'Next.js (SSR)',
+  'Node.js',
+  'Express.js',
+  'MongoDB',
+  'Mongoose',
+  'REST APIs',
+  'TypeScript',
+  'JWT & RBAC',
+  'Azure Blob Storage',
+  'Razorpay',
+  'Angular',
+  'RxJS',
+  'NgRx',
+  'Redux Toolkit',
+  'Tailwind CSS'
+]
+
 export default function Experience() {
   const { playHover } = useSound()
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    })
+  }
 
   return (
-    <section id="experience" className="py-24 relative">
-      <div className="max-w-5xl mx-auto px-6">
+    <section id="experience" className="py-24 relative overflow-hidden">
+      {/* Subtle ambient blur */}
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -24,23 +59,51 @@ export default function Experience() {
           <h2 className="font-serif text-4xl md:text-5xl tracking-tight text-foreground drop-shadow-sm">
             Professional Work Experience
           </h2>
+          <p className="text-sm md:text-base text-foreground/60 max-w-xl mx-auto mt-3">
+            3+ years engineering production full-stack systems, SSR performance migrations, and enterprise platforms.
+          </p>
         </motion.div>
 
         <div className="space-y-12">
           {resumeData.experience.map((exp, idx) => (
             <motion.div
               key={exp.company + idx}
+              ref={cardRef}
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="relative p-8 md:p-10 rounded-3xl bg-card/60 border border-border/70 hover:border-border hover:bg-card transition-all duration-300 group shadow-sm"
-              onMouseEnter={playHover}
+              onMouseEnter={() => {
+                playHover()
+                setIsHovered(true)
+              }}
+              onMouseLeave={() => setIsHovered(false)}
+              onMouseMove={handleMouseMove}
+              className="relative p-8 md:p-10 rounded-3xl bg-card/60 border border-border/70 hover:border-border transition-all duration-300 group shadow-sm overflow-hidden"
             >
+              {/* Interactive Cursor Spotlight Glow */}
+              <div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                style={{
+                  background: isHovered
+                    ? `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.08), transparent 60%)`
+                    : '',
+                }}
+              />
+
               <div className="relative z-10">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between mb-8 gap-4 border-b border-border/50 pb-6">
                   <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 font-semibold uppercase tracking-wider">
+                        Full-Time Employment
+                      </span>
+                      <span className="text-xs font-mono text-foreground/50">
+                        • 3+ Years Track Record
+                      </span>
+                    </div>
+
                     <h3 className="text-2xl md:text-3xl font-semibold mb-2 text-foreground group-hover:text-blue-500 transition-colors">
                       {exp.role}
                     </h3>
@@ -86,6 +149,24 @@ export default function Experience() {
                       </div>
                     ))
                   ) : null}
+                </div>
+
+                {/* Tech Ecosystem Chips */}
+                <div className="mt-8 pt-6 border-t border-border/50">
+                  <div className="text-xs font-mono text-foreground/50 mb-3 flex items-center gap-2">
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Technologies & Architectures Deployed at Soluzione IT Services:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {roleTechPills.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2.5 py-1 text-[11px] font-mono rounded-lg bg-secondary/80 border border-border/60 text-foreground/80"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.div>

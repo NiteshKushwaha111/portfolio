@@ -8,11 +8,11 @@ import { useSound } from './sections/sound-provider'
 import { ThemeToggle } from './sections/theme-toggle'
 
 const navItems = [
-  { href: '#skills', label: 'Skills' },
-  { href: '#playground', label: 'Playground' },
-  { href: '#experience', label: 'Experience' },
   { href: '#projects', label: 'Projects' },
-  { href: '#testimonials', label: 'Testimonials' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#playground', label: 'Playground' },
+  { href: '#about', label: 'About' },
   { href: '#contact', label: 'Contact' },
 ]
 
@@ -20,7 +20,7 @@ export default function Navbar() {
   const { playHover, playClick, isMuted, toggleMute } = useSound()
   const [scrolled, setScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('skills')
+  const [activeSection, setActiveSection] = useState('projects')
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Dispatch event to open Command Palette
@@ -103,7 +103,7 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:flex flex-col text-left">
                 <span className="text-sm font-bold font-serif leading-tight text-foreground">Nitesh Kushwaha</span>
-                <span className="text-[10px] font-mono text-foreground/70 dark:text-foreground/60">Frontend Developer</span>
+                <span className="text-[10px] font-mono text-foreground/70 dark:text-foreground/60">MERN Stack Developer</span>
               </div>
             </motion.a>
 
